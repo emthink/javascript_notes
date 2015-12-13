@@ -2,7 +2,7 @@
 layout: post
 title: JavaScript Notes
 permalink: readme.md
-description: Share my notes to everyone
+description: javascript object oriented
 date: 2015-12-12 16:02:30 +08:00
 tags: "JavaScript 笔记分享"
 ---

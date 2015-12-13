@@ -2,7 +2,7 @@
 layout: post
 title: JavaScript Notes
 permalink: readme.md
-description: Share my notes to everyone
+description: javascript domReady
 date: 2015-12-13 19:44:20 +08:00
 tags: "JavaScript 笔记分享"
 ---
@@ -58,7 +58,7 @@ jQuery的ready事件是在形成完整的DOM树之后便会触发，不必等到
 	})
 ```
 
-*注：页面中只有一个基于window的load事件能执行，而$(document).ready()可以同时编写多个，并且都可以得到执行 *
+*注：页面中只有一个基于window的load事件能执行，而$(document).ready()可以同时编写多个，并且都可以得到执行。*
 
 ##DOMContentLoaded事件
 
