@@ -36,6 +36,7 @@ JavaScript引用类型主要包括Object，Array，Date，RegExp，Function以�
 - **Object构造函数** 调用Object构造函数，可使用new Object()形式创建对象。*Object.create()方式创建对象亦很常见。*
 ###JavaScript继承
 继承（Object Orient）向来是面向对象语言最突出特征之一，如Java等传统OO语言都支持基于类的继承，而JavaScript中是没有类的概念，其主要依靠原型链实现继承。
+
 > 基于原型链的委托机制就是原型继承的本质，基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法。
 
 ####原型
