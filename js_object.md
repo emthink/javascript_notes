@@ -42,8 +42,8 @@ JavaScript引用类型主要包括Object，Array，Date，RegExp，Function以�
 对象的原型，就JavaScript真正实现而言，其实对象并无原型，而是对象的构造器（构造函数）与原型。所谓‘对象把请求委托给自己的原型’即是把请求委托给其构造器原型。JavaScript对象的__proto__属性默认即指向其构造器原型对象。
 
 `
-var a = new Object();
-console.log(a.__proto__ === Object.prototype);  //true
+	var a = new Object();
+	console.log(a.__proto__ === Object.prototype);  //true
 `
 
 ####构造函数，原型与实例
@@ -54,22 +54,22 @@ console.log(a.__proto__ === Object.prototype);  //true
 - **默认原型** 所有引用类型默认都继承了Object，所有函数的默认原型都是Object实例，而如前所述：构造函数的实例都包含一个指向原型对象的内部指针，因此默认原型都包含一个指向Object.prototype（即Object原型）的内部指针。
 
 `
-function Animal() {
-	this.property = 'Animal';
-}
-Animal.prototype.getAnimalProperty = function() {
-	return this.property;
-}
-function Dog() {  
-	this.dogproperty = 'Dog';
-}
-Dog.prototype = new Animal();//继承自Animal
-Dog.prottotype.getDogProperty = function() {
-	return this. dogproperty; 
-}
-var dog = new Dog();
-alert(dog.getDogProperty);
-alert(dog.getAnimalProperty);
+	function Animal() {
+		this.property = 'Animal';
+	}
+	Animal.prototype.getAnimalProperty = function() {
+		return this.property;
+	}
+	function Dog() {  
+		this.dogproperty = 'Dog';
+	}
+	Dog.prototype = new Animal();//继承自Animal
+	Dog.prottotype.getDogProperty = function() {
+		return this. dogproperty; 
+	}
+	var dog = new Dog();
+	alert(dog.getDogProperty);
+	alert(dog.getAnimalProperty);
 `
 
 ##总结
