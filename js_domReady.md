@@ -35,10 +35,11 @@ window的load事件是JavaScript中最常用的事件之一，当页面完全加
 -  通过为body元素添加onload特性
 
 ```
-	\.\.\.
+	...
 	<body onload="alert('Loaded')">
 	</body>
 ```
+
 *注：页面中只能有一个基于window的load事件*
 
 ##jQuery之ready
