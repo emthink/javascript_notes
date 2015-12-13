@@ -1,7 +1,7 @@
 ---
 layout: post
 title: JavaScript Notes
-permalink: javascrit_share.html
+permalink: readme.md
 description: Share my notes to everyone
 date: 2015-12-12 16:02:30 +08:00
 tags: "JavaScript 笔记分享"
@@ -39,12 +39,12 @@ JavaScript引用类型主要包括Object，Array，Date，RegExp，Function以�
 > 基于原型链的委托机制就是原型继承的本质，基本思想是利用原型让一个引用类型继承另一个引用类型的属性和方法。
 
 ####原型
-对象的原型，就JavaScript真正实现而言，其实对象并无原型，而是对象的构造器（构造函数）与原型。所谓‘对象把请求委托给自己的原型’即是把请求委托给其构造器原型。JavaScript对象的__proto__属性默认即指向其构造器原型对象。
+对象的原型，就JavaScript真正实现而言，其实对象并无原型，而是对象的构造器（构造函数）与原型。所谓‘对象把请求委托给自己的原型’即是把请求委托给其构造器原型。JavaScript对象的\_\_proto\_\_属性默认即指向其构造器原型对象。
 
-`
+```
 	var a = new Object();
 	console.log(a.__proto__ === Object.prototype);  //true
-`
+```
 
 ####构造函数，原型与实例
 **每一个构造函数都有一个原型对象，原型对象都包含一个指向构造函数的指针，而构造函数的实例都包含一个指向原型对象的内部指针。JavaScript中所有对象都默认继承自根对象Object。**
@@ -53,7 +53,7 @@ JavaScript引用类型主要包括Object，Array，Date，RegExp，Function以�
 
 - **默认原型** 所有引用类型默认都继承了Object，所有函数的默认原型都是Object实例，而如前所述：构造函数的实例都包含一个指向原型对象的内部指针，因此默认原型都包含一个指向Object.prototype（即Object原型）的内部指针。
 
-`
+```
 	function Animal() {
 		this.property = 'Animal';
 	}
@@ -70,12 +70,12 @@ JavaScript引用类型主要包括Object，Array，Date，RegExp，Function以�
 	var dog = new Dog();
 	alert(dog.getDogProperty);
 	alert(dog.getAnimalProperty);
-`
+```
 
 ##总结
 - **对象的根对象** JavaScript对象都源于（继承自）根对象Object。
 - **对象源自克隆** 定义对象，不是通过实例化类，而是把另一对象作为原型并克隆之。
-- **对象记忆性** 请求可以在原型链中依此向后传递，每个对象都会记住自己的原型，详细请回顾上文关于对象原型之说的__proto__属性。
+- **对象记忆性** 请求可以在原型链中依此向后传递，每个对象都会记住自己的原型，详细请回顾上文关于对象原型之说的\_\_proto\_\_属性。
 -  **对象请求传递性** 若当前对象无法响应当前请求，便将其委托给其构造器原型。
 
 
