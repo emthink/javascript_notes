@@ -11,6 +11,8 @@ tags: "Share JavaScript Notes"
 
 在JavaScript学习中，this的重要性不明而寓，有必要对其深入学习，而与this息息相关的有两个特别需要注意的就是call，apply，本篇就着手从this开始阐述，而后介绍call、apply之用法。
 
+> 调用一个函数时代码执行控制权就转移到此函数，同时将参数传入此函数，除了声明函数时定义的形式参数，每个函数都会接受两个附加参数：this和arguments。
+
 ##this
 **JavaScript中this总是指向一个对象，这个对象基于函数运行时的执行环境动态绑定，而非函数声明时所处环境。**
 
@@ -116,3 +118,78 @@ tags: "Share JavaScript Notes"
 	console.log(obj.getName.apply(obj2)); //输出Web
 ```
 当以Function.prototype.call或Function.prototype.apply方式调用函数时，动态传入参数改变执行环境，此时this指向传入的对象。
+
+##call与apply
+call与apply是Function原型上定义的两个方法，其应用广泛。
+
+* **1.call与apply的区别**
+
+两者作用完全一样，不同之处在于传入参数的形式。
+> call传入参数数量不固定，第一个参数代表所调用函数体内this的指向，而后依次为所调用函数所需参数。
+> 
+> apply接受最多两个参数，第一个参数指定被调用函数内this的指向，第二个参数为一个带下标的集合，可以是数组或者类数组，作为参数传给被调用函数。
+
+```
+
+	var fn = function(a, b, b) {
+		console.log([a, b, c]);
+	};
+	fn.call(null, 1,2,3);
+	fn.apply(null, [1,2,3]);
+```
+**需要注意的是，非严格模式下，使用call或apply时，第一个参数是必须的，当第一个参数传入null时，函数体内this就会指向被调用函数的宿主对象(其包含对象)；而严格模式下，this指向则为null**
+
+* **2.call与apply的应用**
+
+(1). 改变this指向
+使用call或apply调用函数可改变函数体内this的指向。实例如前文中this指向相关实例。
+
+(2). Function.prototype.bind
+Function.prototype.bind可以用来绑定函数体内this指向，其参数为this的指向对象。IE8及以下不支持，这里我们可以自己实现一个。
+```
+
+	Function.prototype.bind = function(context) {
+		var self = this;  //保存原函数的引用
+		return function() { //返回一个新函数
+			return self.apply(context, arguments); //将传入的参数指定为新函数体内this的指向对象
+		};
+	};	
+	var obj = {
+		name: 'Job'
+	};
+	var fn = function() {
+		console.log(this.name);
+	};
+	fn.bind(obj)();
+```
+
+(3) 借用其他对象的方法
+最熟悉的就是借用构造函数实现类似继承的效果：
+```
+
+	var Animal = function(name) {
+		this.name = name;
+	};
+	var Dog = function() {
+		Animal.apply(this, arguments);
+	};
+	Dog.prototype.getName = function() {
+		return this.name;
+	};
+	
+	var dog = new Dog('Dog');
+	console.log(dog.getName());  //输出Dog
+```
+另一很常见的情况就是借用Array.prototype对象上的方法处理函数参数类数组arguments:
+```
+
+	(function() {
+		Array.prototype.shift.call(arguments); //arguments为类数组[1,2,3]
+		var args = Array.prototype.slice.apply(arguments); //将arguments类数组剩余参数转换为数组赋给args变量
+		console.log(arguments); //输出[2, 3]
+		console.log(args); //输出[2, 3]
+	})(1,2,3);
+```
+上面借用Array.prototype上的shift方法移除参数列表的首位，当然也可以借用其他方法达到其他目的，如push, slice等。
+
+JavaScript中，call与apply的应用是非常广泛的，在各类Js框架库中，都不难发现其身影。
