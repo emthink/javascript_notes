@@ -16,9 +16,9 @@ Javascript中创建的每个函数都有一个prototype属性，这个属性是�
 
 默认情况，所有的原型对象都会有一个constructor属性，这个属性包含一个指向prototype属性所在函数的指针。
 
-调用构造函数创建一个新实例后，实例的内部将包含一个指向构造函数原型对象的指针，在ECMA-262中定义此指针为[[Prototype]]，并不能被显式的访问到，而在Firefox,Safari和Chrome中每个对象上有一个__proto__属性。
+调用构造函数创建一个新实例后，实例的内部将包含一个指向构造函数原型对象的指针，在ECMA-262中定义此指针为[[Prototype]]，并不能被显式的访问到，而在Firefox,Safari和Chrome中每个对象上有一个\_\_proto\_\_属性。
 
-*__proto__显示的是实例与构造函数原型对象间的关系，而非实例与构造函数间的关系。*
+*\_\_proto\_\_显示的是实例与构造函数原型对象间的关系，而非实例与构造函数间的关系。*
 
 ```
 
@@ -32,7 +32,7 @@ Javascript中创建的每个函数都有一个prototype属性，这个属性是�
 	var animal = new Animal('Dog');
 	console.log(animal.getName());  //输出Dog
 ```
-以上代码中，Animal为构造函数，Animal.prototype指向构造函数原型对象；原型对象中constructor属性指向构造函数，即Animal.prototype.constructor指向Animal；在构造函数实例中，其__proto__属性指向构造函数原型对象。
+以上代码中，Animal为构造函数，Animal.prototype指向构造函数原型对象；原型对象中constructor属性指向构造函数，即Animal.prototype.constructor指向Animal；在构造函数实例中，其\_\_proto\_\_属性指向构造函数原型对象。
 
 * 1. 原型与实例属性访问
 
@@ -99,7 +99,7 @@ hasOwnProperty()方法可以检测一个属性是在原型上还是实例上，�
 
 * 2.实例与原型的引用关系
 
-实例在创建时，其内部指针[[Prototype]](在上文提到的__proto__)指向构造函数原型对象，存在引用关系。
+实例在创建时，其内部指针[[Prototype]](在上文提到的\_\_proto\_\_)指向构造函数原型对象，存在引用关系。
 
 ```
 
