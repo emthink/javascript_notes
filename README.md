@@ -2,7 +2,7 @@
 
 **[欢迎访问本人博客](http://blog.codingplayboy.com) **
 or
-**[欢迎访问本人博客](http://codingplayboy.duapp.com) **
+**[欢迎访问本人博客](http://note.codingplayboy.com) **
 
 - **[JavaScript之面向对象](https://github.com/codingplayboy/javascript_notes/blob/master/js_object.md)**
 - **[JavaScript之解释与执行机制](https://github.com/codingplayboy/javascript_notes/blob/master/js_compileRun.md)**
