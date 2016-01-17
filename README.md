@@ -11,6 +11,7 @@ or
 - **[JavaScript之this、call与apply](https://github.com/codingplayboy/javascript_notes/blob/master/js_executionContext.md)**
 - **[JavaScript之文档加载load与ready](https://github.com/codingplayboy/javascript_notes/blob/master/js_domReady.md)**
 - **[JavaScript之闭包与高阶函数（一）](https://github.com/codingplayboy/javascript_notes/blob/master/js_closureFunc.md)**
+- **[JavaScript之闭包与高阶函数（二）](https://github.com/codingplayboy/javascript_notes/blob/master/js_func.md)**
 - **[JavaScript之异步编程](https://github.com/codingplayboy/javascript_notes/blob/master/js_asynCoding.md)**
 - **[JavaScript之数组排序、去重及最值算法](https://github.com/codingplayboy/javascript_notes/blob/master/js_arrAlgortithm.md)**
 - **[JavaScript之树列表插件实现](https://github.com/codingplayboy/javascript_notes/blob/master/js_treeview_plugin.md)**
