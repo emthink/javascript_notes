@@ -242,7 +242,7 @@ Promise是CommonJS的规范之一，拥有resolve、reject、done、fail、then�
 							nextTick(function() {
 								if (state === 'rejected') {
 									value.then(errback);
-								}else if (satte === 'resolved') {	
+								}else if (state === 'resolved') {	
 									value.then(callback);
 								}
 							});
