@@ -165,7 +165,7 @@ Promise是CommonJS的规范之一，拥有resolve、reject、done、fail、then�
 							});
 						});
 						tasks = null;
-						srare = 'resolved';
+						state = 'resolved';
 					}else {
 						if (state === 'resolved') {
 							throw new Error('A promise should been resolved once.');
