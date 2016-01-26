@@ -26,8 +26,8 @@ DTD告诉浏览器当前文档用的是什么标记语言，然后浏览器才�
 
 	能包含已过时的元素和框架元素。
 	
-如下，是一个过渡DTDhtml文档：
 
+在html文档中定义DTD就是通过！doctype定义，如下，是一个html4.0的过渡DTDhtml文档：
 ```
 	
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -41,7 +41,31 @@ DTD告诉浏览器当前文档用的是什么标记语言，然后浏览器才�
 	</html>
 	
 ```
+或在html5中：
+
+```
+
+	<!doctype html>
+	<html>
+		<head>
+			<title></title>
+		</head>
+		<body>
+		</body>
+	</html>
+```
 	
 ## document.documentElement与document.body
-document代表的是整个文档(对于一个网页来说包括整个网页结构)，document.documentElement是整个文档节点树的根节点，在网页中即html标签；document.body是整个文档DOM节点树里的body节点，网页中即为body标签元素。
 
+- document代表的是整个文档(对于一个网页来说包括整个网页结构)，document.documentElement是整个文档节点树的根节点，在网页中即html标签；
+- document.body是整个文档DOM节点树里的body节点，网页中即为body标签元素。
+
+我们常看见如下这种写法获取页面滚动条滚过的长度：
+
+```
+
+	var top = document.documentElement.scrollTop || document.body.scrollTop;
+	或
+	var top = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop;
+```
+在文档使用了DTD时，document.body.scrollTop的值为0，此时需要使用document.documentElement.scrollTop来获取滚动条滚过的长度；在未使用DTD定义文档时，使用document.body.scrollTop获取值。
