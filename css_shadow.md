@@ -7,9 +7,9 @@ date: 2016-01-29 15:41:20 +08:00
 tags: "some tags here"
 ---
 
-# CSS3之阴影效果box-shadow
+# CSS3之阴影效果box-shadow和text-shadow
 
-本篇，我们要讲的是CSS3中经常被使用来开发页面效果的box-shadow属性和text-shadow属性。
+本篇，我们要讲的是CSS3中经常被使用来开发页面模糊阴影效果的box-shadow属性和text-shadow属性。
 
 在前端开发过程中，我们常常会看见这种效果：
 
@@ -60,3 +60,60 @@ blur          | 可选 ，阴影模糊半径，不可为负值。
 spread     |可选，阴影延展半径，可为负值。
 color        |可选，阴影颜色
 
+### 阴影偏移量
+box-shadow阴影偏移量可正可负，为正值时则向右或下偏移，如下：
+
+- 正水平偏移量阴影
+
+![正水平偏移量阴影](http://blog-resource.bj.bcebos.com/photos/2016_01/css_shadow4.png)
+
+- 负水平偏移量阴影
+
+![负水平偏移量阴影](http://blog-resource.bj.bcebos.com/photos/2016_01/css_shadow5.png)
+
+- 正垂直偏移量阴影
+
+![正垂直偏移量阴影](http://blog-resource.bj.bcebos.com/photos/2016_01/css_shadow6.png)
+
+- 负垂直偏移量阴影
+
+![负垂直偏移量阴影](http://blog-resource.bj.bcebos.com/photos/2016_01/css_shadow7.png)
+
+### 模糊半径
+
+- 正模糊半径阴影
+
+![正模糊半径阴影](http://blog-resource.bj.bcebos.com/photos/2016_01/css_shadow3.png)
+
+- box-shadow不支持负模糊半径
+
+### 延展半径
+
+- 正延展半径
+
+![正延展半径阴影](http://blog-resource.bj.bcebos.com/photos/2016_01/css_shadow8.png)
+
+- 负延展半径
+
+![负延展半径阴影1](http://blog-resource.bj.bcebos.com/photos/2016_01/css_shadow9.png)
+
+![负延展半径阴影2](http://blog-resource.bj.bcebos.com/photos/2016_01/css_shadow10.png)
+
+## text-shadow
+
+> text-shadow 属性向文本设置阴影。
+
+![文本阴影](http://blog-resource.bj.bcebos.com/photos/2016_01/css_textshadow.png)
+
+- 语法
+
+	`text-shadow: x-offset y-offset blur color;`
+
+- 属性
+
+属性         |说明
+---------- | ----------
+x-offset    |必需，水平方向阴影偏移量，可为负值。
+y-offset    |必需，垂直方向上阴影偏移量，可为负值。
+blur          | 可选 ，阴影模糊半径，不可为负值。
+color        |可选，阴影颜色

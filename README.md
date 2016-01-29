@@ -19,3 +19,4 @@ or
 - **[HTML之多列布局CSS实现](https://github.com/codingplayboy/javascript_notes/blob/master/html_columns.md)**
 - **[漫谈document.documentElement与document.body](https://github.com/codingplayboy/javascript_notes/blob/master/html_dbody.md)**
 - **[CSS之定位机制](https://github.com/codingplayboy/javascript_notes/blob/master/css_position.md)**
+- **[CSS3之阴影效果box-shadow和text-shadow](https://github.com/codingplayboy/javascript_notes/blob/master/css_shadow.md)**
