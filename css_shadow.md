@@ -91,9 +91,13 @@ box-shadow阴影偏移量可正可负，为正值时则向右或下偏移，如�
 
 - 正延展半径
 
+	正延展半径向外延展阴影半径
+
 ![正延展半径阴影](http://blog-resource.bj.bcebos.com/photos/2016_01/css_shadow8.png)
 
 - 负延展半径
+
+	负延展半径向内收缩阴影半径
 
 ![负延展半径阴影1](http://blog-resource.bj.bcebos.com/photos/2016_01/css_shadow9.png)
 
