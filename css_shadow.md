@@ -9,6 +9,8 @@ tags: "some tags here"
 
 # CSS3之阴影效果box-shadow和text-shadow
 
+[本篇相关代码演示地址](http://jhssdemo.duapp.com/demo/smallcase/htc/css3_shadow.html)
+
 本篇，我们要讲的是CSS3中经常被使用来开发页面模糊阴影效果的box-shadow属性和text-shadow属性。
 
 在前端开发过程中，我们常常会看见这种效果：
