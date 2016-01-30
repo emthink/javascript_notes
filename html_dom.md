@@ -1,4 +1,4 @@
-# HTML DOM
+# HTML DOM(一)
 DOM(Document Object Model)，定义了表示和操作HTML或XML文档的标准方法。DOM是在浏览器中加载的一个文档模型并且把文档表达为一棵节点树，节点树中每个节点表示文档的一部分。
 
 DOM是网络中使用最多的一系列API，因为它允许在浏览器中运行的代码访问并操作文档中的每一个节点。可以创建、移动、修改节点。可以给节点注册事件并触发已注册事件，执行事件处理程序。
@@ -24,10 +24,10 @@ DOM可以将HTML或XML文档表示成一个多节点的节点树。
 
 ![DOM节点树](http://blog-resource.bj.bcebos.com/photos/2016_01/dom.png)
 
-文档节点是每个文档的根节点，上例中文档节点的一个子节点<html>元素，是文档的最外层元素，即文档元素。
+文档节点是每个文档的根节点，上例中文档节点的一个子节点<html\>元素，是文档的最外层元素，即文档元素。
 文档中的每一段标记都可以通过树中节点表示：文档类型通过文档类型节点表示，HTML元素通过元素节点表示，特性通过特性节点表示，注释通过注释节点表示，所有类型节点都继承自基类型：Node类型。
 
-*在HTML文档中，文档元素始终是<html>元素。*
+*在HTML文档中，文档元素始终是<html\>元素。*
 
 ### Node类型
 DOM1级定义了一个Node接口，该接口作为Node类型实现的，JavaScript中的所有节点类型都继承自Node类型。
@@ -74,7 +74,7 @@ Node.DOCUMENT_FRAGMENT_NODE(11)  |文档片段节点
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-    	<title>DOM</title>
+        <title>DOM</title>
     </head>
     <body>
     	<div id="dParent">
@@ -93,7 +93,7 @@ Node.DOCUMENT_FRAGMENT_NODE(11)  |文档片段节点
 
 - childNodes
 
-每个节点也有一个childNodes属性，其中是一个NodeList对象：
+每个节点也有一个childNodes属性，其值是一个NodeList对象：
 
 > NodeList是一种类数组对象，保存着一组有序的节点，可以通过位置访问这些节点。
 
@@ -132,6 +132,16 @@ childNodes有length属性，在Chrome/FireFox/IE9+环境下，其值包括父节
 - previousSibling和nextSibling
 
 previousSibling和nextSibling属性分别表示当前节点的相邻的前一个同胞节点，相邻的后一个同胞节点。同胞节点具有相同父节点。
+
+- ownerDocument
+
+该属性指向整个文档的文档节点，即文档根节点，如：
+
+```
+
+    var p = document.getElementById('pChild');
+    console.log(p.ownerDocument);//输出#document文档节点
+```
 
 #### 操作节点
 本节介绍操作节点的一些常用方法，如下：
@@ -239,3 +249,5 @@ cloneNode       |复制某节点，返回该节点的一个副本。
         };
     </script>
 ```
+
+本篇介绍了HTML DOM、节点树、文档中所有类型节点的基类型Node类型及Node节点操作、下篇将介绍DOM中更多具体的节点类型及其相关操作。
