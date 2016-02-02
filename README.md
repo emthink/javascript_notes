@@ -16,7 +16,10 @@ or
 - **[JavaScript之数组排序、去重及最值算法](https://github.com/codingplayboy/javascript_notes/blob/master/js_arrAlgortithm.md)**
 - **[JavaScript之树列表插件实现](https://github.com/codingplayboy/javascript_notes/blob/master/js_treeview_plugin.md)**
 - **[JavaScript之正则表达式](https://github.com/codingplayboy/javascript_notes/blob/master/js_regexp.md)**
+- **[JavaScript之Cookie详解](https://github.com/codingplayboy/javascript_notes/blob/master/js_cookie.md)**
 - **[HTML之多列布局CSS实现](https://github.com/codingplayboy/javascript_notes/blob/master/html_columns.md)**
+- **[HTML DOM(一)](https://github.com/codingplayboy/javascript_notes/blob/master/html_dom.md)**
+- **[HTML DOM(二)](https://github.com/codingplayboy/javascript_notes/blob/master/html_dom_2.md)**
 - **[漫谈document.documentElement与document.body](https://github.com/codingplayboy/javascript_notes/blob/master/html_dbody.md)**
 - **[CSS之定位机制](https://github.com/codingplayboy/javascript_notes/blob/master/css_position.md)**
 - **[CSS3之阴影效果box-shadow和text-shadow](https://github.com/codingplayboy/javascript_notes/blob/master/css_shadow.md)**
