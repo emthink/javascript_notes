@@ -96,4 +96,140 @@ lang          |元素内容的语言代码
     </script>
 ```
 ### 操作元素特性
-操作特性的DOM方法主要有三个：getAttribute()、setAttribute()、removeAttribute()
+操作特性的DOM方法主要有三个：getAttribute()、setAttribute()、removeAttribute()，均可对包括以HTMLELement类型属性定义的特性的所有特性使用：
+
+- getAttribute()
+
+使用getAttribute()可访问所有特性，也包括元素节点的自定义属性。
+
+```
+
+    var d = document.getElementById('mydiv');
+    console.log(d.getAttribute('id'));//mydiv
+    console.log(d.getAttribute('class'));
+```
+*注：getAttribute()接收的参数是实际特性名，对于className特性来说就应该是class，因为className对应的是元素中的class属性。*
+
+- setAttribute()
+
+setAttribute()接收两个参数：第一个是特性名，第二个是对应的值。若特性存在，则只是更新特性对应值；若不存在，则创建该属性并赋值。
+
+*注：此方法既可操作HTML特性，也可操作自定义属性。*
+
+- removeAttribute()
+
+removeAttribute()方法接收一个参数，即特性名称，作用是彻底删除元素的特性。
+
+### 创建元素节点
+使用document.createElement()可以创建一个新元素，其接收一个参数，即标签名称。
+
+```
+
+    var d = document.createElement('div');
+    document.body.appendChild(d);
+```
+
+## Text类型--文本节点
+文本节点一般是包含节点内的文本内容，其具有以下特性：
+
+属性          |值
+--------------|---------
+nodeType      |3
+nodeName      |#text
+nodeValue     |节点内包含的文本
+parentNode    |Element
+childNodes    |无
+
+### 创建文本节点
+使用document.createTextNode()可以创建一个文本节点，其接收一个参数：新建文本节点内包含的文本。
+
+```
+
+    var txt = document.createTextNode('<strong>Helelo</strong> fwq');
+    var d = document.createElement('div');
+    d.appendChild(txt);
+    document.body.appendChild(d);
+```
+*注：document.createTextNode()接收的参数将按照HTML或XML格式进行编码，即支持HTML代码格式。*
+
+### 操作文本节点的文本
+DOM提供了多种方法对文本节点的文本进行多样操作：
+
+- 访问文本
+
+可以使用nodeValue特性或data属性访问Text节点内包含的文本，也可通过对其赋值，修改文本。
+
+```
+
+    var txt = document.createTextNode('<strong>Helelo</strong> fwq');
+    console.log(txt.data); //输出"<strong>Helelo</strong> fwq"
+    console.log(txt.nodeValue); //输出"<strong>Helelo</strong> fwq"
+```
+
+- 其他操作
+
+方法                           |描述
+-------------------------------|---------
+appendData(text)               |将text添加到节点末尾
+deleteData(offset,num)         |从offset指定的位置开始删除num个字符
+insertData(offset,text)        |从offset指定的位置插入text
+replaceData(offset,num,text)   |从offset指定的位置到offset+num处的文本替换为text
+splitText(offset)              |从offset指定的位置将文本分成两个文本节点
+substringData(offset,num)      |截取从offset位置到offset+num处的字符串
+
+```
+
+    var txt = document.createTextNode('<strong>Helelo</strong> fwq');
+    txt.replaceData(23, 4, 'world');
+    console.log(txt.data);//输出"<strong>Helelo</strong>world"
+```
+
+## Comment类型--注释节点
+注释在DOM中是通过Comment类型表示，其具有以下特性：
+
+属性          |值
+--------------|---------
+nodeType      |8
+nodeName      |#comment
+nodeValue     |注释的内容
+parentNode    |Document或Element
+childNodes    |无
+
+### 创建注释节点
+使用document.createComment()可以创建一个注释节点：
+
+```
+
+    var comment = document.createComment('Comment');
+    console.log(comment.data); //输出Comment
+```
+注释节点访问，操作方法与Text类型一样，除了没有splitText()方法。
+
+## DocumentFragment类型--文档片段类型
+DocumentFragment在文档中没有对应的标记，文档片段是一种轻量级的文档，可以包含和控制节点，但不占用额外资源，其具有以下特性：
+
+属性          |值
+--------------|---------
+nodeType      |11
+nodeName      |#document-fragment
+nodeValue     |null
+parentNode    |null
+childNodes    |Element或Comment或Text
+
+文档片段继承了Node类型属于方法，通常在文档片段里保存将来要添加到文档的节点，以减少页面重绘和回流，减少性能损耗。
+
+```
+
+    var frag = document.createDocumentFragment();
+    var ul = document.getElementById('menu');
+    var li;
+    var txt;
+    for (avr i = 0; i < 4; i++) {
+        li = document.createElement('li');
+        txt = document.createTextNode('menu' + i);
+        li.appendChild(txt);
+        frag.appendChild(li);
+    }
+    ul.appendChild(frag);
+```
+
