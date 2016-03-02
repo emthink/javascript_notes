@@ -1,5 +1,5 @@
 # Web学习之跨域问题及解决方案
-
+同源策略（SOP）,核心是确保不同源提供的文件之间是相互独立的。
 
 1.document.domain+iframe情形 
 2.jQuery下通过jsonp实现跨域 
@@ -35,7 +35,64 @@ b.a.com中将domain设置为c.a.com。
 	1、安全性，当一个站点（b.a.com）被攻击后，另一个站点（c.a.com）会引起安全漏洞。
 	2、如果一个页面中引入多个iframe，要想能够操作所有iframe，必须都得设置相同domain。
 
-2.jQuery下通过jsonp实现跨域
+2.jsonp实现跨域
+JSONP，即带填充的JSON，可以在JavaScript中绕过同源策略，发起跨域HTTP请求。
+
+> JSONP，一个无关标准，使用脚本标签来跨域获取数据的技术。
+
+同源策略有一个显著例外：HTML脚本元素是可以规避SOP检查的。这意味着我们可以通过加载外部JavaScript文件的方式来向其他源发出HTTP请求。
+
+```<script>http://blog-resource.bj.bcebos.com/files/2016/03/info.js</script>```
+
+```
+
+    //http://blog-resource.bj.bcebos.com/files/2016/03/info.js
+    var jsonpData = {
+        name: 'jsonp',
+	    title: 'JSONP data'
+    };
+```
+
+动态的回调函数
+
+JSONP通过script元素加载JSON，通过脚本URL的查询字符串，服务器将响应封装在回调函数中，而回调函数名由请求者在URL查询字符串中给出，此回调函数，即填充。填充可以是任何有效的JavaScript表达式，最常见的是变量和回调函数。
+
+```
+
+    <script>
+        var jsonpCallback = function(data) {
+            console.log('The response data: ' + JSON.stringify(data));
+        };
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'http://blog-resource.bj.bcebos.com/files/2016/03/info2.js?callback=jsonpCallback';
+        document.body.appendChild(script);
+    </script>
+```
+在全局作用域下定义回调函数，当HTML DOM中加入script标签时发起请求，服务端可以通过URL获取回调函数名，并生成返回如下类似内容：
+
+```
+
+    jsonpCallback({
+        name: 'jsonp',
+        title: 'JSONP data'
+    });
+```
+如php实现：
+
+```
+    
+    <?php
+        header("Content-type: application/javascript");
+        $callback = $_GET['callback'];
+        $data = json_encode(array(
+            'name' => 'jsonp,
+            'title' => 'JSONP data'
+        ), JSON_PRETTY_PRINT);
+        echo "$callback($data);";
+    ?>
+```
+
 $.ajax({    
            url: '',  // 跨域URL   
            type: 'GET',    
