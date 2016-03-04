@@ -1,5 +1,53 @@
 # Web学习之跨域问题及解决方案
+在做前端开发时，我们时常使用ajax与服务器通信获取资源，享受ajax便利的同时，也知道它有限制：跨域安全限制。
 
+> 默认情况下，XHR对象只能访问与包含它的页面处于同一域中的资源，这种限制可以预防某些恶意攻击，但同时也带来很多不便。
+
+本篇对于常见的解决浏览器跨域问题的方案进行总结阐述。
+
+## 常见解决跨域问题的方案
+在web开方中，解决跨域问题最常见的方法有：
+
+- document.domain+iframe
+- jsonp实现跨越
+- postMessage实现跨越
+- CORS服务端解决跨域
+
+接下来对以上常用方式进行详细阐述：
+
+### document.domain + iframe
+对于主域相同而子域不同的情况，可以通过设置document.domain的办法来解决。如：对于两个文件http://www.a.com/a.html和http://blog.a.com/b.html均加上设置document.domain = 'a.com'；然后在a.html文件中创建一个iframe，通过iframe两个js文件即可交互数据：
+
+```
+
+    //www.a.com/a.html
+    <script>
+        document.doamin = 'a.com';
+        var iframe = document.createElement('iframe');
+        iframe.src = 'http://blog.a.com/b.html';
+        document.body.appendChild(iframe);
+        iframe.onload = function() {
+            var doc = iframe.contentDocument || iframe.contentWindow.document;
+            // 在这里操纵b.html
+            console.log(doc);
+        };
+    </script>
+```
+在blog.a.com/b.html内编写代码：
+
+```
+    
+    //blog.a.com/b.html
+    <script>
+        document.domain = 'a.com';
+    </script>
+```
+
+备注：某一页面的domain默认等于window.location.hostname。主域名是不带www的域名，例如a.com，主域名前
+面带前缀的通常都为二级域名或多级域名，例如blog.a.com其实是二级域名。 domain只能设置为主域名，不可以在
+blog.a.com中将domain设置为test.a.com。
+
+### 
 
 1.document.domain+iframe情形 
 2.jQuery下通过jsonp实现跨域 
