@@ -97,7 +97,7 @@ $.ajax({
            url: '',  // 跨域URL   
            type: 'GET',    
            dataType: 'jsonp',    
-           jsonp: 'jsoncallback', //默认callback   
+           jsonp: 'jsonpcallback', //默认callback   
            data: mydata, //请求数据   
            timeout: 5000, 
            success: function (json) { //客户端jquery预先定义好的callback函数，成功获取跨域服务器上的
@@ -112,6 +112,84 @@ json数据后，会动态执行这个callback函数
        });
 
 3.服务器端的跨域解决方案
+
+跨域资源共享（CORS）定义了浏览器和服务器如何通过可控方式进行跨域通信。CORS通过添加特殊HTTP头信息以允许浏览器和服务器判断请求是成功还是失败。几乎所有现代浏览器都支持CORS。
+
+HTTP请求
+
+当跨域发送HTTP请求时，支持CORS的浏览器会通过，添加额外Origin头信息指定请求源，其值包括请求协议、域名、端口。如：
+
+```Origin: http://www.codingplayboy.com```
+
+若请求头中无Origin信息，服务器将不反悔任何CORS头信息。
+
+服务端接收到请求时会检查头信息确定是否接受请求：若接受请  求，必须返回一个包含Access-Control-Allow-Origin响应头，其值与请求头Origin值相同，如：
+
+```Access-Control-Allow-Origin: http://www.codingplayboy.com```
+
+对于公共资源且允许任何源请求数据，服务器通常返回该值为通配符*，如：
+
+````Access-Control-Allow-Origin: *```
+
+浏览器接收到服务器HTTP响应时，首先会检查Access-Control-Allow-Origin的值，只有当值存在且同Origin匹配，才继续处理该请求。
+
+下面是一段使用CORS跨域请求的代码：  
+```
+
+    function createCORS(url, method) {
+        if (typeof XMLHttpRequest === 'undefined') {
+            return null;
+        }
+        //标准浏览器
+        var xhr = new XMLHttpRequest();
+        if ('withCredentials' in xhr) {
+            xhr.open(method, url, true);
+        }else if (typeof XDomainRequest !== 'undefined') {
+            //IE
+            xhr = new XDomainRequest();
+            xhr.open(method, null);
+        }else {
+            //不支持CORS
+            xhr = null;
+        }
+        return xhr;
+    }
+    var req = createCORS('http://blog.codingplayboy.com', 'GET');
+    if (req) {
+        req.onload = function() {
+            
+        };
+        req.send();
+    }
+```
+
+Cookie及HTTP认证头
+我们还需要知道不同于普通的HTTP请求，使用CORS发送请求时，默认情况下，浏览器不会携带任何Cookie和HTTP认证头等识别信息，只有当我们将XMLHttpRequest对象的withCredentials属性值设为true，才在该请求发送时添加额外识别信息。
+
+```
+    
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+```
+
+若服务器需要识别信息，则在响应头中添加Access-Control-Allow-Credentials响应头：
+
+```Access-Control-Allow-Credentials: true```
+
+若发送请求时将withCredentials设为true，服务端没有返回该响应头，浏览器将拒绝该响应。
+
+本来一切都是美好的，然而XDomainRequest不支持withCredentials属性，于是IE8、IE9并不支持请求时包含识别信息。
+
+预检请求
+
+使用CORS时，若请求方法不是GET，POST或HEAD，又或者使用了自定义HTTP头，浏览器将发起预检请求。
+
+> 预检请求是一个服务端认证机制，在执行请求之前会判断该请求是否合法。
+
+发送复杂请求时，浏览器会将原始请求的方法和请求头作为预检请求的信息发送给服务器；服务器需要决定是否接受该请求并响应，预检请求通常是使用一种OPTIONS的HTTP方法。
+
+客户端发起复杂请求时，会先发起预检，携带以下头信息
+
 response.setHeader("Access-Control-Allow-Origin", "*");...
 Access-Control-Allow-Origin: <origin> | * // 授权的源控制
 Access-Control-Max-Age: <delta-seconds> // 授权的时间
