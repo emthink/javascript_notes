@@ -23,3 +23,5 @@ or
 - **[漫谈document.documentElement与document.body](https://github.com/codingplayboy/javascript_notes/blob/master/html_dbody.md)**
 - **[CSS之定位机制](https://github.com/codingplayboy/javascript_notes/blob/master/css_position.md)**
 - **[CSS3之阴影效果box-shadow和text-shadow](https://github.com/codingplayboy/javascript_notes/blob/master/css_shadow.md)**
+- **[Web学习之跨域问题及解决方案](https://github.com/codingplayboy/javascript_notes/blob/master/web_cross_domain.md)**
+- **[初识Node-Webkit之桌面应用程序开发](https://github.com/codingplayboy/javascript_notes/blob/master/web_nwjs.md)**

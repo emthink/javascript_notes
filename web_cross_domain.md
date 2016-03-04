@@ -1,6 +1,8 @@
 # Web学习之跨域问题及解决方案
 
-在做前端开发时，我们时常使用ajax与服务器通信获取资源，享受ajax便利的同时，也知道它有限制：跨域安全限制。
+在做前端开发时，我们时常使用ajax与服务器通信获取资源，享受ajax便利的同时，也知道它有限制：跨域安全限制，即同源策略。
+
+> 同源策略（SOP）,核心是确保不同源提供的文件之间是相互独立的
 
 > 默认情况下，XHR对象只能访问与包含它的页面处于同一域中的资源，这种限制可以预防某些恶意攻击，但同时也带来很多不便。
 
@@ -9,14 +11,14 @@
 ## 常见解决跨域问题的方案
 在web开方中，解决跨域问题最常见的方法有：
 
-- document.domain+iframe
+- document.domain+iframe（子域名代理）
 - jsonp实现跨越
 - postMessage实现跨越
 - CORS服务端解决跨域
 
 接下来对以上常用方式进行详细阐述：
 
-### document.domain + iframe
+### 1.document.domain + iframe（子域名代理）
 对于主域相同而子域不同的情况，可以通过设置document.domain的办法来解决。如：对于两个文件http://www.a.com/a.html和http://blog.a.com/b.html均加上设置document.domain = 'a.com'；然后在a.html文件中创建一个iframe，通过iframe两个js文件即可交互数据：
 
 ```
@@ -48,46 +50,11 @@
 面带前缀的通常都为二级域名或多级域名，例如blog.a.com其实是二级域名。 domain只能设置为主域名，不可以在
 blog.a.com中将domain设置为test.a.com。
 
-### 
-=======
-同源策略（SOP）,核心是确保不同源提供的文件之间是相互独立的。
-
-
-1.document.domain+iframe情形 
-2.jQuery下通过jsonp实现跨域 
-3.服务器端的跨域解决方案 
-4.h5 postMessage
-5.IE8下的跨域问题
-
-1.document.domain+iframe
-对于主域相同而子域不同的例子，可以通过设置document.domain的办法来解决。具体的做法是可以在
-http://www.a.com/a.html和http://script.a.com/b.html两个文件中分别加上document.domain = ‘a.com’；然
-后通过a.html文件中创建一个iframe，去控制iframe的contentDocument，这样两个js文件之间就可以“交互”了。
-当然这种办法只能解决主域相同而二级域名不同的情况，如果你异想天开的把script.a.com的domian设为
-alibaba.com那显然是会报错地！代码如下：
-www.a.com上的a.html
-document.domain = 'a.com';
-var ifr = document.createElement_x('iframe');
-ifr.src = 'http://script.a.com/b.html';
-ifr.style.display = 'none';
-document.body.appendChild(ifr);
-ifr.onload = function(){
-    var doc = ifr.contentDocument || ifr.contentWindow.document;
-    // 在这里操纵b.html
-    alert(doc.getElementsByTagName_r("h1")[0].childNodes[0].nodeValue);
-};
-script.a.com上的b.html
-document.domain = 'a.com';
-这种方式适用于{www.kuqin.com, kuqin.com, script.kuqin.com, css.kuqin.com}中的任何页面相互通信。
-备注：
-    某一页面的domain默认等于window.location.hostname。主域名是不带www的域名，例如a.com，主域名前
-面带前缀的通常都为二级域名或多级域名，例如www.a.com其实是二级域名。 domain只能设置为主域名，不可以在
-b.a.com中将domain设置为c.a.com。
 问题：
 	1、安全性，当一个站点（b.a.com）被攻击后，另一个站点（c.a.com）会引起安全漏洞。
 	2、如果一个页面中引入多个iframe，要想能够操作所有iframe，必须都得设置相同domain。
 
-2.jsonp实现跨域
+### 2.jsonp实现跨域
 JSONP，即带填充的JSON，可以在JavaScript中绕过同源策略，发起跨域HTTP请求。
 
 > JSONP，一个无关标准，使用脚本标签来跨域获取数据的技术。
@@ -105,7 +72,7 @@ JSONP，即带填充的JSON，可以在JavaScript中绕过同源策略，发起�
     };
 ```
 
-动态的回调函数
+- 动态的回调函数
 
 JSONP通过script元素加载JSON，通过脚本URL的查询字符串，服务器将响应封装在回调函数中，而回调函数名由请求者在URL查询字符串中给出，此回调函数，即填充。填充可以是任何有效的JavaScript表达式，最常见的是变量和回调函数。
 
@@ -145,7 +112,9 @@ JSONP通过script元素加载JSON，通过脚本URL的查询字符串，服务�
     ?>
 ```
 
-$.ajax({    
+```
+
+    $.ajax({    
            url: '',  // 跨域URL   
            type: 'GET',    
            dataType: 'jsonp',    
@@ -153,7 +122,7 @@ $.ajax({
            data: mydata, //请求数据   
            timeout: 5000, 
            success: function (json) { //客户端jquery预先定义好的callback函数，成功获取跨域服务器上的
-json数据后，会动态执行这个callback函数    
+    json数据后，会动态执行这个callback函数    
                if(json.actionErrors.length!=0){    
                    alert(json.actionErrors);    
                }    
@@ -162,12 +131,13 @@ json数据后，会动态执行这个callback函数
                  
            }
        });
+```
 
-3.服务器端的跨域解决方案
+### 3.服务器端的跨域解决方案
 
 跨域资源共享（CORS）定义了浏览器和服务器如何通过可控方式进行跨域通信。CORS通过添加特殊HTTP头信息以允许浏览器和服务器判断请求是成功还是失败。几乎所有现代浏览器都支持CORS。
 
-HTTP请求
+- HTTP请求
 
 当跨域发送HTTP请求时，支持CORS的浏览器会通过，添加额外Origin头信息指定请求源，其值包括请求协议、域名、端口。如：
 
@@ -232,7 +202,7 @@ Cookie及HTTP认证头
 
 本来一切都是美好的，然而XDomainRequest不支持withCredentials属性，于是IE8、IE9并不支持请求时包含识别信息。
 
-预检请求
+- 预检请求
 
 使用CORS时，若请求方法不是GET，POST或HEAD，又或者使用了自定义HTTP头，浏览器将发起预检请求。
 
@@ -240,13 +210,28 @@ Cookie及HTTP认证头
 
 发送复杂请求时，浏览器会将原始请求的方法和请求头作为预检请求的信息发送给服务器；服务器需要决定是否接受该请求并响应，预检请求通常是使用一种OPTIONS的HTTP方法。
 
-客户端发起复杂请求时，会先发起预检，携带以下头信息
+客户端发起复杂请求时，会先发起预检，携带以下头信息:
 
-response.setHeader("Access-Control-Allow-Origin", "*");...
-Access-Control-Allow-Origin: <origin> | * // 授权的源控制
-Access-Control-Max-Age: <delta-seconds> // 授权的时间
-Access-Control-Allow-Credentials: true | false // 控制是否开启与Ajax的Cookie提交方式
-Access-Control-Allow-Methods: <method>[, <method>]* // 允许请求的HTTP Method
-Access-Control-Allow-Headers: <field-name>[, <field-name>]* // 控制哪些header能发送真正的请求 
-4.h5 postMessage
-http://www.cnblogs.com/dolphinX/p/3464056.html   
+|请求头                 |描述
+|-----------------------------------|---------------
+|Origin                             |请求源
+|Access-Control-Request-Method      |请求方法（HTTP方法）
+|Access-Control-Request-Headers     |请求自定义头（以逗号分隔）
+
+服务器返回的响应头：
+
+|响应头                 |描述
+|-----------------------------------|---------------
+|Access-Control-Allow-Origin        |允许的请求源（与请求头Origin匹配）
+|Access-Control-Allow-Methods       |允许的请求方法（以逗号分隔）
+|Access-Control-Allow-Headers       |允许的头信息（以逗号分隔）
+|Access-Control-Max-Age             |预检请求的缓存时间（单位：秒）
+|Access-Control-Allow-Credentials   |指定请求是否支持认证信息（可选）
+
+客户端接收到服务端的响应后，会使用之前声明的HTTP方法和请求头发送真正的请求。
+
+*预检请求会被浏览器缓存，缓存时间为Access-Control-Max-Age值，缓存时间内，后续相同类型的请求不再发起重复的预检请求。IE8、IE9均不支持预检请求。*
+
+### 4.HTML5 postMessage
+HTML5的window.postMessage为浏览器带来了一个安全的、基于事件的消息API。与之前的子域名代理通过iframe跨子域通信不同，使用postMessage不再是直接访问一个文档的属性和方法，而是向文档发送消息然后等待响应，这要求形成一条双向的通信通道。 
+更多有关postMessage的内容将在下一篇阐述。
