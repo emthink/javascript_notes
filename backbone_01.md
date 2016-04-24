@@ -14,6 +14,12 @@ MVC，即Model-View-Controller，是一种架构设计模式，强调通过分�
 - Backbone通常将模型进行分类分组，在分组中管理具有同一类特征的模型，这些分组就是集合，集合可以对模型进行许多操作。
 - Backbone中通常有一个或多个视图观察同一模型，模型更新时，视图获得通知，进行视图更新
 
+## 集合
+集合是模型的有序组合，一般通过对同一性质或类型模型进行分组归入不同集合以集中管理模型，但集合并不是必须的。
+
+- 集合可以很方便的添加和删除、更新模型，检索模型，并能对模型进行批量管理。
+- 集合通过绑定change事件可以监听到集合中模型的变化，并执行相应监听函数。
+
 ## 视图
 在程序中，用户一般只与用户界面（即视图）交互，用户通过视图对模型进行操作。
 
@@ -34,6 +40,25 @@ MVC，即Model-View-Controller，是一种架构设计模式，强调通过分�
         <p><%= price %></p>
         <div class="buy <%= num > 0 ? 'buy' : 'disabled' %>"></div>
     </div>
+```
+
+## 事件Event
+Backbone事件Event，将事件触发后要执行的函数注册成事件处理句柄，事件发生便触发执行该函数。
+
+- 可以将业务逻辑与用户界面关注点分离，即业务逻辑不需要知道界面工作流程。
+- Backbone.Events对象混入Backbone模型、集合、路由、视图等诸多对象中。
+- Backbone.Events可以让任何对象具有绑定和触发事件的能力。
+
+```
+
+    //引入underscore.js...
+    var obj = {};
+    _.extend(obj, Backbone.Events);
+    
+    obj.on('eat', function(msg) {
+        console.log(msg);
+    });
+    obj.trigger('eat', 'eat food');
 ```
 
 ## 路由
