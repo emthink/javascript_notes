@@ -1,5 +1,7 @@
 # Backbone入门之视图(Backbone.View)
 
+[上一篇介绍了Backbone集合]()，本篇将介绍Backbone视图。
+
 Backbone视图可以使用JavaScript模板，根据模型数据的逻辑处理向用户展示相应的界面。可以监听模型的change事件，并在回调函数绑定视图的render()方法，就可以在不重绘整个页面的情况下，更新视图。
 
 ## 创建视图
@@ -203,3 +205,170 @@ app.menulist.$el:
 	```
 	
 ## 渲染模板-render()
+
+render()函数是一个可选函数，需要我们主动调用，通常我们在里面实现根据模型属性渲染视图模板，生成HTML标记；然后使用el或$el属性，将这些HTML标记设置为视图的el属性所引用的 DOM元素的HTML内容。
+
+```
+
+	app.MenuModel = Backbone.Model.extend({
+       	defaults: {
+	       	title: 'this is a menu',
+	       	status: 'inactive'
+       	}
+       });
+	app.MenuCollection = Backbone.Collection.extend({
+	    model: app.MenuModel,
+	    initialize: function() {
+	        console.log('集合初始化成功');
+	        this.on('reset', function(cols, options) {
+	        	console.log('重置集合');
+	        }, this);
+	        this.on('add', function(model) {
+	        	console.log('添加模型，cid： ' + model.cid);
+	        });
+	         this.on('change', function(model) {
+	        	console.log('模型属性改变为: ' + model.get('name'), model);
+	        });
+	        this.on('change:name', function(model) {
+	        	console.log('模型name属性改变为: ' + model.get('name'));
+	        });
+	        this.on('remove', function(model) {
+	        	console.log('移除模型: ' + model.cid);
+	        });
+	    }
+	});
+	var menus = [
+		{
+			id: 1,
+			name: '最近会话',
+			status: 'active'
+		},
+		{
+			id: 2,
+			name: '通讯录',
+			status: 'inactive'
+		}
+	]
+	app.menus = new app.MenuCollection(menus);
+	app.MenuItemView = Backbone.View.extend({
+		tagName: 'li',
+		className: 'menu-item',
+		template: function() {
+			return _.template('<a title="<%= title %>"><%= name %></a>');
+		},
+		render: function() {
+			this.$el.html(this.template()(this.model.toJSON()));
+			return this;
+		}
+	});	
+	app.MenuListView = Backbone.View.extend({
+		tagName: 'ul',
+		className: 'menu-list',
+		template: function() {
+			return _.template('');
+		}, 
+		render: function() {
+			//遍历集合，集合中每个模型对应一个菜单项
+			_.each(this.collection.models, function(model) {
+				//为每个集合模型，创建一个新菜单项视图实例
+				var menuItemView = new app.MenuItemView({model: model});
+				//在父视图-菜单列表视图中添加子菜单-菜单项视图
+				this.$el.append(menuItemView.render().el);
+			}, this);
+			console.log(this.el);
+			return this;
+		},
+		initialize: function() {
+			this.render();
+			$('body').append(this.$el);
+		}
+	});
+	app.menulist = new app.MenuListView({
+		collection: app.menus
+	});
+```
+控制台打印值如下：
+![this.el](http://blog-resource.bj.bcebos.com/photos/2016/05/app-menus-views07.png)
+
+页面效果如图：
+![页面效果图](http://blog-resource.bj.bcebos.com/photos/2016/05/app-menus-views06.png)
+
+*我们通常在render()函数底部返回this以开启链式调用，该视图可以在其他父视图里被重用。*
+
+## Events对象
+Backbone提供events对象支持我们通过设置在el下的自定义CSS选择器、事件类型和事件监听器，为DOM元素绑定事件。
+
+
+```
+
+	app.MenuItemView = Backbone.View.extend({
+		tagName: 'li',
+		className: 'menu-item',
+		events: {
+			'click .menu': 'openMenu',
+			'dblclick .menu': 'edit'
+		},
+		template: function() {
+			return _.template('<a class="menu" title="<%= title %>"><%= name %></a>');
+		},
+		render: function() {
+			this.$el.html(this.template()(this.model.toJSON()));
+			return this;
+		},
+		initialize: function() {
+			this.dbltimer = null;
+		},
+		openMenu: function(e) {
+			if (this.dbltimer) {
+				clearTimeout(this.dbltimer);
+				this.dbltimer = null;
+			}
+			this.dbltimer = setTimeout(function(){ 
+				console.log('opened');
+		    },300);
+		},
+		edit: function(e) {
+			if (this.dbltimer) {
+				clearTimeout(this.dbltimer);
+				this.dbltimer = null;
+			}
+			console.log('edit');
+		}
+	});	
+	app.MenuListView = Backbone.View.extend({
+		tagName: 'ul',
+		className: 'menu-list',
+		template: function() {
+			return _.template('');
+		}, 
+		render: function() {
+			_.each(this.collection.models, function(model) {
+				var menuItemView = new app.MenuItemView({model: model});
+				this.$el.append(menuItemView.render().el);
+			}, this);
+			// this.$el.html(this.template()({title: "Menu List"}));
+			console.log(this.el);
+			return this;
+		},
+		initialize: function() {
+			this.render();
+			$('body').append(this.$el);
+		}
+	});
+	app.menulistview = new app.MenuListView({
+		collection: app.menus
+	});
+```
+
+*若没有设置CSS选择器，则默认为el所引用DOM元素绑定事件。*
+
+## 移除视图-remove()
+
+调用View.remove()，从DOM中移除一个视图。同时将调用stopListening来移除通过 listenTo绑定在视图上的所有事件。
+
+```
+
+	app.menulistview.remove();
+```
+
+以上是对Backbone视图的回顾与总结，下一篇将介绍Backbone事件。
