@@ -229,6 +229,7 @@ HTML/CSS代码风格指导。
 		/* good */
 		.slide-wrap {}
 	```
+[更多相关讨论](https://github.com/cssmagic/blog/issues/42)
 
 - 样式表中尽量避免使用ID为标签声明样式
 
