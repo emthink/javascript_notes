@@ -31,6 +31,8 @@ HTML/CSS代码风格指导。
 
 ## 通用格式规范
 
+- 代码风格必须统一
+
 - html,css分离
 
 	```
@@ -111,6 +113,21 @@ HTML/CSS代码风格指导。
 
 		<!-- good -->
 		<h1>The Document Header</h1>
+	```
+
+- 标签嵌套遵循规范
+
+	```
+	
+		<!-- bad -->
+		<span>
+			<div></div>
+		</span>
+		
+		<!-- good -->
+		<div>
+			<div></div>
+		</div>
 	```
 
 - 为多媒体资源提供备选内容
@@ -342,6 +359,43 @@ HTML/CSS代码风格指导。
 
 		/* good */
 		margin: .8em;
+	```
+
+- 样式规则按类型依次书写
+
+	- Formatting Model 相关属性包括：position / top / right / bottom / left / float / display / overflow 等
+     	- Box Model 相关属性包括：border / margin / padding / width / height 等
+     	- Typographic 相关属性包括：font / line-height / text-align / word-wrap 等
+     	- Visual 相关属性包括：background / color / transition / list-style 等
+	```
+	
+		/* bad */
+		.error {
+			margin: 0 10px;
+			height: 150px;
+			color: #fff;
+			font-size: 14px;
+			left: 10px;
+			border: 1px solid #ffccff;
+			position: relative;
+			top: 5px;
+			width: 100px;
+			display: block;
+		}
+		
+		/* good */
+		.error {
+			display: block;
+			position: relative;
+			top: 5px;
+			left: 10px;
+			width: 100px;
+			height: 150px;
+			margin: 0 10px;
+			border: 1px solid #ffccff;
+			font-size: 14px;
+			color: #fff;
+		}
 	```
 
 ### 注释
