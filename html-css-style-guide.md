@@ -362,10 +362,14 @@ HTML/CSS代码风格指导。
 	```
 
 - 样式规则按类型依次书写
-	- Formatting Model 相关属性包括：position / top / right / bottom / left / float / display / overflow 等
-     	- Box Model 相关属性包括：border / margin / padding / width / height 等
-     	- Typographic 相关属性包括：font / line-height / text-align / word-wrap 等
-     	- Visual 相关属性包括：background / color / transition / list-style 等
+
+	- Formatting Model 相关属性包括：position / top / right / bottom / left / float / display / overflow...
+	
+     	- Box Model 相关属性包括：border / margin / padding / width / height...
+     	
+     	- Typographic 相关属性包括：font / line-height / text-align / word-wrap...
+     	
+     	- Visual 相关属性包括：background / color / transition / list-style...
      	
 	```
 	
