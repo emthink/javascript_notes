@@ -44,17 +44,17 @@ HTML/CSS代码风格指导。
 		<h1 class="font-1e">Html</h1>
 	```
 
-- 一次缩进2个（或4个）空格
+- 一次缩进4个空格
 
 	```
 
 		<ul>
-		  <li>Fantastic</li>
-		  <li>Style Guide</li>
+		    <li>Fantastic</li>
+		    <li>Style Guide</li>
 		</ul>
 
 		.content {
-		  color: #ff0000;
+		    color: #ff0000;
 		}
 	```
 
@@ -115,7 +115,7 @@ HTML/CSS代码风格指导。
 		<h1>The Document Header</h1>
 	```
 
-- 标签嵌套遵循规范
+- 标签嵌套遵循规范（待定）
 
 	```
 	
@@ -217,7 +217,7 @@ HTML/CSS代码风格指导。
 		.address {}
 	```
 
-- 在使用较长ID或Class值时，使用连字符‘-’连接
+- 在使用较长Class值时，使用连字符‘-’连接
 
 	```
 
@@ -246,18 +246,18 @@ HTML/CSS代码风格指导。
 
 ### 样式规则块
 
-- 每段样式之间应该以空行分隔
+- 样式模块之间应该以空行分隔
 
 	```
 
 		/* bad */
-		html {}
-		body {}
+		.login {}
+		.registe {}
 
 		/* good */
-		html {}
+		.login {}
 
-		body {}
+		.registe {}
 	```
 
 - 所有成块样式均应该缩进
@@ -265,7 +265,7 @@ HTML/CSS代码风格指导。
 	```
 
 		@media screen {
-			html {}
+		    html {}
 		}
 	```
 
@@ -351,15 +351,15 @@ HTML/CSS代码风格指导。
 		}
 	```
 
-- 属性值在-1和1之间时，省略前面的0
+- 属性值在-1和1之间时，不能省略前面的0
 
 	```
 
 		/* bad */
-		margin: 0.8em;
+		margin: .8em;
 
 		/* good */
-		margin: .8em;
+		margin: 0.8em;
 	```
 
 - 样式规则按类型依次书写
