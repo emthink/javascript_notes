@@ -118,6 +118,8 @@
 
 先来一个实例：[点此进入touch事件线上实例](http://demo.codingplayboy.com/demo/mobile/mobile_touch.html)
 
+[线上查看代码](https://github.com/codingplayboy/web_demo/blob/master/mobile/mobile_touch.html)
+
 js代码如下:
 
 ```
@@ -150,10 +152,14 @@ js代码如下:
 
 参考jQuey或zepto类库对DOM事件的封装，我们可以使用门面模式封装不同的事件处理，为用户提供统一，简单的API。
 
+线上实例：[点此查看自定义tap事件线上实例](http://demo.codingplayboy.com/demo/mobile/mobile_tap.html)
+
+[线上查看代码](https://github.com/codingplayboy/web_demo/blob/master/mobile/mobile_tap.html)
+
 ```
 	
 	//自执行函数
-	;(function(exports) {
+	;(function(window) {
 		
 		var TapEventPro;
 		var TOUCHSTART;
@@ -184,7 +190,59 @@ js代码如下:
 			}else {
 				this.ele.addEventListener(eventType, callback);
 			}
+
 			return this;
+		};
+
+		TapEventPro.off = function(eventType, callback) {
+			if (eventType === 'tap') {
+				this.ele.removeEventListener(TOUCHSTART, callback);
+			}else if (eventType === 'tapend') {
+				this.ele.removeEventListener(TOUCHEND, callback);
+			}else {
+				this.ele.removeEventListener(eventType, callback);
+			}
+
+			return this;
+		};
+
+		window.$ = function(selector) {
+			var ele = document.querySelector(selector);
+
+			if (ele) {
+				return new TapEvent(ele);
+			}else {
+				return null;
+			}
 		};
 	})(window);
 ```
+
+使用js:
+
+```
+
+	window.onload = function() {
+		var picWrapper = document.querySelector('.picture');
+
+		function togglePicture() {
+			var displayState = picWrapper.style.display;
+			if (displayState === 'none' || !displayState) {
+				picWrapper.style.display = 'block';
+			}else {
+				picWrapper.style.display = 'none';
+			}
+		}
+
+		$('#toggle-tap').on('tap', function(event) {
+			event.preventDefault();
+			event.target.className = 'active button';
+			togglePicture();
+		});
+		$('#toggle-tap').on('tapend', function(event) {
+			event.target.className = 'button';
+		});
+	};
+```
+
+通过本篇的学习，我们知道在移动端开发，一般使用触摸事件来代替点击事件，性能更好，但是也要注意浏览器的双击缩放和默认事件，也学习了如何兼容不同浏览器对不同事件的支持以及在桌面浏览器的降级处理，以实现用户友好性。
