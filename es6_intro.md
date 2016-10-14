@@ -118,6 +118,13 @@ ES6新增了第七种原始类型：Symbol：
 - for(key) 根据给定的描述符值在全局查找并返回已有的symbol，若不存在，则使用该值创建一个新symbol。
 - keyFor(symbol) 全局查找给定symbol的描述符
 
+```
+
+    var a =  Symbol.for('Test1');
+    var b =  Symbol.keyFor(a);
+    // 输出 Test1
+```
+
 ### 属性
 
 - length Symbol长度，值为0
