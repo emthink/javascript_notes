@@ -236,6 +236,7 @@ Set集合提供很多有用的属性和方法：
 - delete(value) 删除集合元素
 - clear() 清空集合
 - has 判断集合是否包含某元素，效率比数组indexOf快的多
+- \[Symbol.iterator]()：返回一个新的遍历整个集合的迭代器对象
 - forEach(func) 类似Array的forEach方法，接受一个回调函数，依此对集合每一项执行该函数，该函数接收参数如（value, value, set）。
 - set.keys()、set.values()和set.entries()返回各种迭代器，是为了兼容Map而提供的
 
@@ -261,7 +262,8 @@ Map是由若干键值对组成的集合，和Set相似。
 - set(key, value) 新增或修改键值对
 - delete(key) 根据键名删除特定键值对
 - clear() 清空Map
-- forEach(func) 类似Array的forEach方法，接受一个回调函数，依此对集合每一项执行该函数，该函数接收参数如（value, key, map）。
+- \[Symbol.iterator]()：返回一个新的遍历整个集合的迭代器对象
+- forEach(func) 类似Array的forEach方法，接受一个回调函数，依此对集合每一项执行该函数，该函数接收参数如（value, key, map）
 - keys() 遍历返回所有键名
 - values() 遍历返回所有值
 - entries() 遍历返回所有集合项
