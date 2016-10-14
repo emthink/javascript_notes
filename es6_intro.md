@@ -77,6 +77,129 @@ ES6新增let命令，类似var是用来声明变量，不同的是：let声明�
 
 ES6新增const命令用来声明常量，必须且只能在声明时赋值，不可随意修改，否则会抛出语法错误（SyntaxError）。
 
+## Symbol
+
+ES5中，JavaScript共有六种原始类型（primitive type）:
+
+- Object
+- String
+- Number
+- Boolean
+- Undefined
+- Null
+
+ES6新增了第七种原始类型：Symbol：
+
+```
+
+    var mySymbol = Symbol();
+    Symbol(description);
+    Symbol('test') === Symbol('test'); // false
+```
+
+如上，直接调用Symbol(description)，该对象接收一个可选的描述符，创建一个新的symbol，它既不是字符串也不是数字或对象，它是一种全新的类型，不等于任何其他值，包括其他任何Symbol,因此它是唯一的，可以作为键名，可以避免命名冲突：
+
+```
+
+    var mySymbol = Symbol();
+    var obj = {};
+    obj[mySymbol] = 'Test';
+```
+
+### 全局symbol注册表
+
+直接调用Symbol()创建的symbol并不能在全局代码共享，有时候我们希望能有一些全局共享的唯一symbol，这时，我们需要使用Symbol.for()和Symbol.forKey()方法：
+
+```
+
+    Symbol.for('Test');
+```
+
+- for(key) 根据给定的描述符值在全局查找并返回已有的symbol，若不存在，则使用该值创建一个新symbol。
+- keyFor(symbol) 全局查找给定symbol的描述符
+
+### 属性
+
+- length Symbol长度，值为0
+- prototype Symbol构造函数的原型
+
+### Symbol.iterator
+
+除了我们自定义的一些symbols，ES6还新增了一些内置symbols，其中Symbol.iterator是和迭代器相关：
+
+	
+> Symbol.iterator方法返回某一对象默认迭代器,和for...of一起使用访问可遍历数据结构。
+
+### Symbol与for...in遍历
+
+在ES5，我们经常使用for...in结构遍历数组或对象，for...in可以遍历数组或者对象的所有可枚举属性。前文提到，ES6新增的Symbol类型也是可以做对象属性键名的，这一点与字符串一样，但symbols并不能被for...in循环遍历到：
+
+```
+
+    var obj = {
+		[Symbol("test")]: 'test',
+		name: 'jh',
+		age: 23
+	};
+
+	for (var i in obj) {
+   		console.log(i); // 输出 "name" 和 "age"
+	}
+```
+
+如上，symbol在for...in循环不能遍历，Object.getOwnPropertyNames()方法自然也无法返回symbol类型属性，但是新增的Object.getOwnPropertySymbols()方法就可以得到我们需要的结果。
+
+## 迭代器和for...of
+
+在ES5我们习惯性使用for...in遍历数组或对象，但是其有很多问题：
+
+- 会遍历数组自定义可枚举属性，如（arr.name）
+- 遍历顺序是随机的
+- 不能遍历到symbol类型的属性
+
+ES6新增了for...of遍历结构可以弥补这些缺陷。
+
+### for...of
+
+for...of可以遍历集合，数组，字符串，类数组，NodeList类型的数据，但不能遍历object对象:
+
+```
+
+	let str = "test";
+
+	for (let value of str) {
+  		console.log(value);
+	}
+	// 输出 "t" "e" "s" "t"
+	
+	let arr = [2, 4, 6];
+
+	for (let value of arr) {
+  		console.log(value);
+	}
+	// 输出 2 4 6
+```
+
+### 迭代器
+
+拥有\[Symbol.iterator]()的对象就是可迭代的对象，包括数组，对象，集合，类数组，NodeList等等类型数据。可以通过迭代器对所有可迭代对象进行迭代访问，以for...of为例：
+
+```
+
+	var someString = "hi";
+	var iterator = someString[Symbol.iterator]();
+	iterator + "";      // "[object String Iterator]"
+ 
+	iterator.next();    // { value: "h", done: false }
+	iterator.next();    // { value: "i", done: false }
+	iterator.next();	// { value: undefined, done: true }
+```
+如上，我们定义了一个字符串，然后通过其Symbol.iterator属性获取遍历器方法，执行该方法返回一个迭代器对象，赋值给iterator，然后通过调用迭代器对象的next()方法循环遍历该字符串，对于其他类型的数据，也是同理进行遍历，遍历过程总结如下：
+
+- for-of循环，首先调用该遍历数据的的\[Symbol.iterator]()方法，然后返回一个新的迭代器对象。
+- 迭代器对象可以是任意具有next()方法的对象
+- for-of循环将重复调用next()方法，每次循环调用一次，直到遍历结束
+
 ## 集合
 
 JavaScript中现有的Object对象，以键值对形式存储数据，我们可以很方便获取，添加，删除对象属性；但是其键名总是字符串类型，而且我们需要避免与内置方法同名，同时无法直接获取对象键值对的长度。针对这些问题，ES6新增了几种集合类型：Set,Map以及WeakSet,WeakMap。
@@ -90,7 +213,7 @@ Set是由一群互不相同的值组成的不能够通过索引访问到的可�
 > Set可以从任何可遍历数据中提取元素，构造出一个新的集合。
 
 ```
-
+	
     var setOfCity = new Set(['BeiJing', 'ShangHai']);
 ```
 
@@ -148,32 +271,6 @@ Set和Map集合为其每个键或值都保持了强引用，比如DOM元素，�
 
 ES6新增WeakSet和WeakMap以避免上文提到的内存泄漏：一个弱集合并不对其中的对象保持强引用。当弱集合中的一个对象被回收时，它将被从集合中移除；如果一个键仍被引用，其对应的值也将仍被引用。
 
-## Symbol
-
-ES5中，JavaScript共有六种原始类型（primitive type）:
-
-- Object
-- String
-- Number
-- Boolean
-- Undefined
-- Null
-
-ES6新增了第七种原始类型：Symbol：
-
-```
-
-    var mySymbol = Symbol();
-```
-
-如上，直接调用Symbol()创建一个新的symbol，它既不是字符串也不是数字或对象，它是一种全新的类型，不等于任何其他值，包括其他任何Symbol,因此它是唯一的，可以作为键名，可以避免命名冲突：
-
-```
-
-    var mySymbol = Symbol();
-    var obj = {};
-    obj[mySymbol] = 'Test';
-```
 
 ## 模板字符串
 
