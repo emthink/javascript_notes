@@ -187,6 +187,14 @@ for...of可以遍历集合，数组，字符串，类数组，NodeList类型的�
 ```
 
 	var someString = "hi";
+	
+	// for...of遍历
+	for (var value of someString) {
+	    console.log(value)
+	}
+	// 输出 "h" "i"
+	
+	// 直接使用迭代器对象遍历
 	var iterator = someString[Symbol.iterator]();
 	iterator + "";      // "[object String Iterator]"
  
@@ -196,7 +204,7 @@ for...of可以遍历集合，数组，字符串，类数组，NodeList类型的�
 ```
 如上，我们定义了一个字符串，然后通过其Symbol.iterator属性获取遍历器方法，执行该方法返回一个迭代器对象，赋值给iterator，然后通过调用迭代器对象的next()方法循环遍历该字符串，对于其他类型的数据，也是同理进行遍历，遍历过程总结如下：
 
-- for-of循环，首先调用该遍历数据的的\[Symbol.iterator]()方法，然后返回一个新的迭代器对象。
+- for...of循环，首先调用该遍历数据的的\[Symbol.iterator]()方法，然后返回一个新的迭代器对象。
 - 迭代器对象可以是任意具有next()方法的对象
 - for-of循环将重复调用next()方法，每次循环调用一次，直到遍历结束
 
