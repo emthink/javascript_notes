@@ -135,7 +135,7 @@ ES6新增了第七种原始类型：Symbol：
 除了我们自定义的一些symbols，ES6还新增了一些内置symbols，其中Symbol.iterator是和迭代器相关：
 
 	
-> Symbol.iterator方法返回某一对象默认迭代器,和for...of一起使用访问可遍历数据结构。
+> Symbol.iterator方法返回某一对象默认迭代器,该方法就是后文常见的迭代器方法，和for...of一起使用访问可遍历数据结构。
 
 ### Symbol与for...in遍历
 
@@ -189,6 +189,8 @@ for...of可以遍历集合，数组，字符串，类数组，NodeList类型的�
 
 ### 迭代器
 
+顾名思义，迭代器，就是用来迭代遍历可迭代对象的。
+
 拥有\[Symbol.iterator]()的对象就是可迭代的对象，包括数组，对象，集合，类数组，NodeList等等类型数据。可以通过迭代器对所有可迭代对象进行迭代访问，以for...of为例：
 
 ```
@@ -214,6 +216,153 @@ for...of可以遍历集合，数组，字符串，类数组，NodeList类型的�
 - for...of循环，首先调用该遍历数据的的\[Symbol.iterator]()方法，然后返回一个新的迭代器对象。
 - 迭代器对象可以是任意具有next()方法的对象
 - for-of循环将重复调用next()方法，每次循环调用一次，直到遍历结束
+
+你可能会想，既然只要有\[System.iterator]()方法和next()方法就可以遍历，那么我们是否可以自定义这两个方法来实现我们的自定义迭代器，自定义遍历数据呢？答案是肯定的，详细请看下节生成器最后的一个例子。
+
+**注：object对象，没有默认的\[Symbol.iterator]()方法，不是可迭代对象，不能使用for...of迭代遍历，更多的信息请看下节生成器。**
+
+#### 迭代器对象
+
+前文说过，可迭代对象的\[Symbol.iterator]()方法会返回一个迭代器对象，改迭代器对象拥有next()方法遍历可迭代对象，其实迭代器对象还提供了更多方法(我们可以自己实现，覆盖默认实现)以供对其进行更多操作：
+
+- return() 迭代器过早退出遍历（即迭代器返回{done:true}之前返回）就会执行该方法，比如使用break，return语句或抛出异常，所以我们可以在该方法中进行很多清除工作
+- throw(err) 抛出错误，随后迭代器退出遍历，若迭代器方法内使用了try{}catch(){}捕获异常，则catch会捕获该异常，执行finally{}代码块语句然后退出。
+
+
+## 生成器Generators
+
+曾几何时，你一定非常眼熟这类代码：
+
+```
+
+    function f1(callback) {
+        setTimeout(function() {
+            f2(functions() {
+                setTimeout({    
+                   callback(...) ;
+                }, 0); 
+            });
+            }, 0);
+    }
+    function(callback) {//...}
+```
+上面这段代码，函数里面传入回调函数，函数里面又有回掉函数，由于JavaScript是单线程运行，所以经常会看到这种嵌套回调函数代码，这是很无奈的写法，后来有了很多种实现方式，如发布订阅模式，Promise等，了解更多可以查看[JavaScript之异步编程](http://blog.codingplayboy.com/2016/01/20/js_asycn/)。
+
+在ES6中，新增生成器(Generators)，语法更简洁优雅，且能实现前文嵌套回调函数那种效果。
+
+```
+
+    //ES5下嵌套回调
+    function test(word, callback) {
+        console.log('Level1: ' + word);
+        return callback && callback(word, function(word, callback) {
+            console.log('Level3: ' + word);
+            callback && callback();
+        });
+    }
+    test('Generators', function(word, callback) {
+        console.log('Level2: ' + word);
+        callback && callback(word);
+    });
+    // 依次输出
+    // Level1: Generators
+    // Level2: Generators
+    // Level3: Generators
+```
+在ES6下如果要实现这种效果，很简单：
+
+```
+
+    function* test(word) {
+        yield 'Level1: ' + word;
+        yield 'Level2: ' + word;
+        yield 'Level3: ' + word;
+    }
+    var myGenerator = test('Generators'); 
+    myGenerator.next(); // Object {value: "Level1: xjg", done: false}
+    myGenerator.next(); // Object {value: "Level2: xjg", done: false}
+    myGenerator.next(); // Object {value: "Level3: xjg", done: false}
+    myGenerator.next(); // Object {value: undefined, done: true}
+```
+
+如上面这样的test就是生成器函数，与普通函数相比，有两点不同：
+
+- 生成器函数使用function*声明，而普通函数只需要function关键字直接声明
+- 生成器函数内支持yield语法，其作用类似于普通函数中的return语句，不同的是return语句只会执行一次，为函数返回结果，然后函数结束，而yield可以有多个，每次执行yield只是返回值并暂停生成器函数，随后可恢复该生成器函数的执行。
+
+生成器函数调用方式和普通函数一样，调用生成器函数后，其返回一个暂停的生成器对象(myGenerator)，当我们调用该生成器对象的next()方法时，恢复生成器函数执行代码直至遇见yield语句，再次暂停，在最后一个next()方法调用后，函数已经执行完，此时返回的对象中done为true，value值为undefined，代表生成器函数执行完毕。
+
+### 生成器与迭代器
+
+看到上面那个实例，再回去看看上一节的迭代器，是不是发现了什么呢？其实生成器也是迭代器：
+
+- 拥有\[Symbol.iterator]()方法的对象就是可迭代对象
+- \[Symbol.iterator]()方法返回迭代器对象
+- 迭代器对象都有next()方法，用来迭代遍历需遍历的数据
+
+JavaScript中的所有可迭代对象，包括数组，类数组，集合，字符串等（不包括object对象），都有内置的\[Symbol.iterator]()方法和next()方法，所以我们可以对其进行遍历，当然我们也可以自定义\[Symbol.iterator]()和.next()两个方法来创建自定义迭代器，比如下面这个迭代器是求某数的阶乘：
+
+```
+
+    function Factorial(num) {
+        this.num = num;
+        this.multipleNums = num;
+    }
+    Factorial.prototype[Symbol.iterator] = function() {
+        return this;
+    };
+    Factorial.prototype.next = function() {
+        var num = this.num;
+        if (num > 1) {
+            this.num--;
+            this.multipleNums *= this.num;
+            return {value: this.multipleNums, done: false};
+        }else {
+            return {value: undefined, done: true};
+        }
+    };
+    var myFactorial = new Factorial(10);
+    myFactorial.next(); // Object {value: 90, done: false}  (10*9)
+    myFactorial.next(); // Object {value: 720, done: false}  (10*9*8)
+    //...
+    myFactorial.next(); // Object {value: 3628800, done: false}  (10*9*...*2)
+    myFactorial.next(); // Object {value: 3628800, done: false}  (10*9*...*2*1)
+    myFactorial.next(); // Object {value: undefined, done: true} 
+```
+
+使用生成器同样能够实现，而且更简单，更优雅：
+
+```
+
+    function* factorial(num) {
+        var nums = num;
+        for (var i = num - 1; i > 0; i--) {
+            nums *= i;
+            yield nums;
+        }
+    }
+    var myFactorial = factorial(10);
+    myFactorial.next(); // Object {value: 90, done: false}  (10*9)
+    myFactorial.next(); // Object {value: 720, done: false}  (10*9*8)
+    //...
+    myFactorial.next(); // Object {value: 3628800, done: false}  (10*9*...*2)
+    myFactorial.next(); // Object {value: 3628800, done: false}  (10*9*...*2*1)
+    myFactorial.next(); // Object {value: undefined, done: true}
+```
+
+看到此，更印证了上文说的**生成器也是迭代器**这一说法了，所有的生成器都有内置的\[Symbol.iterator]()方法和next()方法，我们所需要做的仅仅是编写遍历循环时的具体行为。
+
+### object对象的迭代
+
+我们知道object对象并不是可迭代对象，我们无法使用for...of迭代遍历它，但是我们使用生成器的特性，编写一个生成器函数遍历object对象，在生成器函数内通过yield返回每一个属性值，当然这个生成器函数必须是对应的需遍历对象的\[Symbol.iterator]()方法。
+
+### 生成器的其他方法
+
+其实，除了上文提到的yield和next()，我们还可以对生成器进行更多操作：
+
+- generator.return() 返回一个可选值，生成器只执行finally代码块，然后不再恢复执行。
+- generator.throw(err) 生成器抛出一个错误，终止生成器的执行；若当前的生成器暂停在try代码块中，catch捕捉到错误并执行finally代码块，生成器将恢复执行
+- 
 
 ## 集合
 
@@ -675,6 +824,31 @@ JS引擎运行一个模块分四个步骤：
 - 4.运行新加载的模块。
 
  
+## Bable和Traceur
+
+前文讲了这么多ES6新特性，我们感受到了ES6更先进，更简洁，更强大，是不是有点迫不及待去尝试一番，可惜的是，目前所有的浏览器对ES6支持度还不够，如果希望使用ES6编写代码，还是需要使用编译器：Babel或google的Traceur。
+
+我们可以使用命令行工具，这需要我们安装babel模块：
+
+```
+
+    npm install -g babel
+    babel script.js --out-file script-compiled.js
+```
+
+或者也可以直接在浏览器使用，这种方式和引用一个第三方库一样：
+
+```
+
+    <script src="node_modules/babel-core/browser.js"></script>
+    <script type="text/babel">
+        // ES6代码
+    </script>
+```
+
+这种浏览器环境编译代码，不支持多文件多目录的编译，所以需要使用构建工具支持我们的ES6开发，如Grunt,Gulp，webpack，都有相关插件支持代码转译。
+
+ES6入门篇到此就结束了，篇幅还是比较长的，知识点不少，需要我们静下心好好学习一下，更多内容会在以后推出，若有任何疑问或见解，请留言。
 
 
 
