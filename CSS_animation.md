@@ -115,7 +115,52 @@ Internet Explorer 10、Firefox 以及 Opera 支持 @keyframes 规则和 animatio
 
 ## 动画事件
 
-和CSS3 transition相似，CSS3还为更好的控制CSS3动画提供了动画事件：animationstart，animationend，animationiteration，我们可以添加事件监听器。
+和CSS3 transition相似，CSS3还为更好的控制CSS3动画提供了动画事件：animationstart，animationend，animationiteration，我们可以添加事件监听器，如：
+
+```
+
+	var ball = document.querySelector('.box');
+	//事件注册兼容
+	window.EventHandler = function () {
+        if (window.addEventListener) {
+            EventHandler = function(ele, type, callback, bubble) {
+                return ele.addEventListener(type, callback, bubble);
+            }
+        } else if (window.attachEvent)  {
+            EventHandler = function(ele, type, callback, bubble) {
+                return ele.attachEvent('on' + type, callback);
+            }
+        }else {
+        	EventHandler = function(ele, type, callback, bubble) {
+            	ele['on' + type] = errorReport;
+        	}
+        }
+    };
+
+    	function myStartFunction() {
+	    ball.innerHTML = "start";
+	    ball.style.backgroundColor = "yellow";
+	}
+
+	function myIterationFunction() {
+	    ball.innerHTML = "iteration";
+	    ball.style.backgroundColor = "lightblue";
+	}
+
+	function myEndFunction() {
+	    ball.innerHTML = "end";
+	    ball.style.backgroundColor = "lightgray";
+	}
+
+    	EventHandler(ball, "webkitAnimationStart", myStartFunction);
+	EventHandler(ball, "webkitAnimationIteration", myIterationFunction);
+	EventHandler(ball, "webkitAnimationEnd", myEndFunction);
+	EventHandler(ball, "animationstart", myStartFunction);
+	EventHandler(ball, "animationiteration", myIterationFunction);
+	EventHandler(ball, "animationend", myEndFunction);
+```
+
+实例查看[CSS3 animation事件](http://demo.codingplayboy.com/demo/smallcase/htc/css3_animation_event.html)
 
 ## 小球弹动实例
 
