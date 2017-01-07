@@ -71,8 +71,8 @@ vertical-align属性指定行内元素或表格单元格元素在垂直方向的
 为如下值时，相对于其父元素对齐：
 
 1. baseline：将此元素与其父元素按基线对齐
-    1. 基线，一个元素的基线是指其包含的最后一个行内元素的基线。可以查看[使用text-align实现两端对齐布局实例中使用vertical-allign使其垂直方向对齐](http://blog.codingplayboy.com/2016/10/01/justify_layout/)；
-    1. 若元素没有基线，则将其外间距的下边界当作基线
+    1. 基线，一个元素的基线是指正常流中其包含的最后一个行内元素的基线。可以查看[使用text-align实现两端对齐布局实例中使用vertical-allign使其垂直方向对齐](http://blog.codingplayboy.com/2016/10/01/justify_layout/)；
+    1. 若元素没有基线（如，没有正常流中的行内元素或其overflow属性不为visible），则将其外间距的下边界当作基线
 1. middle：将行内盒中线与父元素基线加上父元素中x字母尺寸的一半高度对齐  ；
 1. sub：将此元素基线与父元素的下标基线对齐；
 1. super：将此元素基线与父元素的上标基线对齐；
